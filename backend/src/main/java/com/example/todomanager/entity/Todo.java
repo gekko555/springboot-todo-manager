@@ -24,9 +24,6 @@ public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
     
     @Column(name = "title", nullable = false)
     private String title;
@@ -48,4 +45,37 @@ public class Todo {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Long getId() {
+    return id;
+}
+ 
+public String getTitle() {
+    return title;
+}
+ 
+public String getDescription() {
+    return description;
+}
+ 
+public TodoStatus getStatus() {
+    return status;
+}
+ 
+public TodoPriority getPriority() {
+    return priority;
+}
+ 
+public LocalDate getDueDate() {
+    return dueDate;
+}
+ 
+public LocalDateTime getCreatedAt() {
+    return createdAt;
+}
+ 
+public LocalDateTime getUpdatedAt() {
+    return updatedAt;
+}
+
 }
