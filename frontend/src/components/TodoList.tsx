@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { todoApi, TodoDisplayDto } from '../services/todoApi';
+import { useState, useEffect } from 'react';
+import { todoApi, type TodoDisplayDto } from '../services/todoApi';
 
 export const TodoList: React.FC = () => {
-    const [todos, setTodos] = useState<Todo[]>([]);
+    const [todos, setTodos] = useState<TodoDisplayDto[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -22,12 +22,28 @@ export const TodoList: React.FC = () => {
     return(
         <div>
             <h1>Todo一覧</h1>
-            <div key={TodoDisplayDto.id}>
-                <h3>{todo.title}</h3>
-                <p>{todo.description}</p>
-                <p>ステータス: {todoApi.status}</p>
-            </div>
-            ))}
-        </div>
-    );
-};
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>タスク名</th>
+                        <th>ステータス</th>
+                        <th>優先度</th>
+                        <th>期限</th>
+                     </tr>
+            </thead>
+            <tbody>
+    {todos.map(todo => (
+        <tr key={todo.id}>
+            <td>{todo.id}</td>
+            <td>{todo.title}</td>
+            <td>{todo.status}</td>
+            <td>{todo.priority}</td>
+            <td>{todo.dueDate}</td>
+        </tr>
+    ))}
+</tbody>
+        </table>
+    </div>
+); 
+}
