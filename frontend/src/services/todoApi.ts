@@ -27,6 +27,14 @@ export const todoApi = {
         if(!response.ok) throw new Error('Failed to create todo');
         return response.json();
     },
+
+    deleteTodo: async(id: number): Promise<void> => {
+        const response = await fetch(`http://localhost:8080/api/todos/${id}`, {
+            method: 'DELETE'
+        });
+        if(!response.ok) throw new Error('Failed to delete todo');
+    }
+
 };
 
 export type { TodoDisplayDto };

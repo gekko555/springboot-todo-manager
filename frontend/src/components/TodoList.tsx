@@ -5,6 +5,15 @@ export const TodoList: React.FC = () => {
     const [todos, setTodos] = useState<TodoDisplayDto[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const handleDelete = async(id: number) => {
+        try{
+            await todoApi.deleteTodo(id);
+            window.location.reload();
+        } catch(error) {
+            console.error('削除失敗:', error);
+        }
+    };
+
     useEffect(() => {
         todoApi.getAllTodos()
         .then(data => {
@@ -30,6 +39,7 @@ export const TodoList: React.FC = () => {
                         <th>ステータス</th>
                         <th>優先度</th>
                         <th>期限</th>
+                        <th>操作</th>
                      </tr>
             </thead>
             <tbody>
@@ -40,10 +50,15 @@ export const TodoList: React.FC = () => {
             <td>{todo.status}</td>
             <td>{todo.priority}</td>
             <td>{todo.dueDate}</td>
+            <td>
+                <button onClick={() => handleDelete(todo.id)}>
+                    削除
+                </button>
+            </td>
         </tr>
     ))}
 </tbody>
         </table>
     </div>
 ); 
-}
+};
