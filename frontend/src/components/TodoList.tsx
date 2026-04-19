@@ -8,7 +8,7 @@ export const TodoList: React.FC = () => {
     const handleDelete = async(id: number) => {
         try{
             await todoApi.deleteTodo(id);
-            window.location.reload();
+            setTodos(todos.filter(todo => todo.id !== id)); // ← 状態を更新
         } catch(error) {
             console.error('削除失敗:', error);
         }
