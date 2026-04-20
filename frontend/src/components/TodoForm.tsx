@@ -1,7 +1,13 @@
-import{ useState} from 'react';
+import { useState } from 'react';
 import { todoApi } from '../services/todoApi';
 
-export const TodoForm: React.FC = () => {
+//1.Propsの型定義を追加
+interface TodoFormProps {
+    onTodoCreated: () => void;
+}
+
+//2.Propsを受け取れるように変更
+export const TodoForm: React.FC<TodoFormProps>  = ({ onTodoCreated }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('PENDING');
@@ -20,8 +26,17 @@ export const TodoForm: React.FC = () => {
         };
 
         try{
-            const createTodo = await todoApi.createTodo(newTodo);
-            console.log('作成成功:', createTodo);
+            //3. 呼び出し後に親に通知
+            await todoApi.createTodo(newTodo);
+            onTodoCreated();
+
+            //フォームリセット
+            setTitle('');
+            setDescription('');
+            setStatus('PENDING');
+            setPriority('MEDINUM');
+            setDueDate('');
+           
         }catch(error){
             console.error('作成失敗:', error);
         }

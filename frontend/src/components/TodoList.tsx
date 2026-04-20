@@ -1,32 +1,28 @@
-import { useState, useEffect } from 'react';
 import { todoApi, type TodoDisplayDto } from '../services/todoApi';
 
-export const TodoList: React.FC = () => {
-    const [todos, setTodos] = useState<TodoDisplayDto[]>([]);
-    const [loading, setLoading] = useState(true);
+interface TodoListProps {
+    todos: TodoDisplayDto[];
+    loading: boolean;
+    onTodoDeleted?: () => void;
+}
 
+export const TodoList: React.FC<TodoListProps> = ({ 
+    todos, 
+    loading, 
+    onTodoDeleted 
+}) => {
+  
     const handleDelete = async(id: number) => {
         try{
             await todoApi.deleteTodo(id);
-            window.location.reload();
+            onTodoDeleted?.();
         } catch(error) {
             console.error('削除失敗:', error);
         }
     };
 
-    useEffect(() => {
-        todoApi.getAllTodos()
-        .then(data => {
-            setTodos(data);
-            setLoading(false);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            setLoading(false);
-        });
-    },[]);
-
-    if(loading) return<div>Loading...</div>;
+    if(loading) 
+        return <div>Loading...</div>;
 
     return(
         <div>
