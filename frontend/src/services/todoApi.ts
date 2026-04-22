@@ -28,13 +28,25 @@ export const todoApi = {
         return response.json();
     },
 
+    updateTodo: async (id: number, todo: Omit<TodoDisplayDto, 'id' | 'createdAt' | 'updatedAt'>): Promise<TodoDisplayDto> => {
+        const response = await fetch(`http://localhost:8080/api/todos/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(todo)
+        });
+ 
+        if(!response.ok) throw new Error('Failed to update todo');
+        return response.json();
+    },
+ 
     deleteTodo: async(id: number): Promise<void> => {
         const response = await fetch(`http://localhost:8080/api/todos/${id}`, {
             method: 'DELETE'
         });
         if(!response.ok) throw new Error('Failed to delete todo');
     }
-
 };
 
 export type { TodoDisplayDto };

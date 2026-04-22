@@ -67,5 +67,23 @@ public class TodoService {
     public void deleteTodo(@NonNull Long id){
         todoRepository.deleteById(id);
     }
+
+    public Todo updateTodo (@NonNull Long id, @NonNull Todo todo){
+
+        Todo existingTodo = todoRepository.findById(id).orElse(null);
+
+        if(existingTodo == null) {
+            return null;
+        }
+
+        existingTodo.setTitle(todo.getTitle());
+        existingTodo.setDescription(todo.getDescription());
+        existingTodo.setDueDate(todo.getDueDate());
+        existingTodo.setStatus(todo.getStatus());
+        existingTodo.setPriority(todo.getPriority());
+
+        return todoRepository.save(existingTodo);
+
+    }
     
 }

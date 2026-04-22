@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoForm } from './components/TodoForm';
-import { todoApi } from './services/todoApi';
-
+import { todoApi, type TodoDisplayDto } from './services/todoApi';  // ← 追加
 
 function App() {
   const [todos, setTodos] = useState<TodoDisplayDto[]>([]);
@@ -19,19 +18,24 @@ function App() {
     }
   };
 
+  const handleTodoUpdated = (updatedTodo: TodoDisplayDto) => {
+    setTodos(prevTodos => prevTodos.map(todo => 
+        todo.id === updatedTodo.id ? updatedTodo : todo
+    ));
+  };
+
   useEffect(() => {
     refreshTodos();
   }, []);
 
   return (
-    <div className="App">
-      <TodoForm
-        onTodoCreated={refreshTodos}
-      />
-      <TodoList
+    <div>
+      <TodoForm onTodoCreated={refreshTodos} />
+      <TodoList 
         todos={todos}
         loading={loading}
         onTodoDeleted={refreshTodos}
+        onTodoUpdated={handleTodoUpdated}
       />
     </div>
   );
