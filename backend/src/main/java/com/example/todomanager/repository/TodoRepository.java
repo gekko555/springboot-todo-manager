@@ -76,5 +76,45 @@ public interface TodoRepository extends JpaRepository<Todo, Long>{
     @Query("SELECT t FROM Todo t ORDER BY t.dueDate DESC")
     List<Todo> findAllOrderByDueDateDesc();
 
+    //16.優先順
+    @Query("SELECT t FROM Todo t ORDER BY t.priority DESC")
+    List<Todo> findAllOrderByPriorityDesc();
 
+    //17.タイトル部分一致＋ステータス（修正）
+    @Query("""
+        SELECT t FROM Todo t 
+        WHERE t.title LIKE CONCAT('%', :keyword, '%')
+            AND t.status = :status
+        """)
+        List<Todo> findByTitleContainingAndStatus(
+            @Param("keyword") String keyword,
+            @Param("status") TodoStatus status);
+
+    //18.ステータス＋優先度
+    @Query("""
+            SELECT t FROM Todo t
+            WHERE t.status = :status
+             AND t.priority = :priority
+    """)
+    List<Todo> findByStatusAndPriorityList(
+        @Param("statsu") TodoStatus status,
+        @Param("priority") TodoPriority priority
+    );
+
+    //動的検索
+    @Query("""
+            SELECT t FROM Todo t
+            WHERE (:keyword IS NULL OR t.title LIKE CONCAT('%', :keyword, '%'))
+            AND (:status IS NULL OR t.status = :status)
+            AND (:priority IS NULL OR t.priority = :priority)
+            AND (:dueDateFrom IS NULL OR t.dueDate >= :dueDateFrom)
+            AND (:dueDateTo IS NULL OR t.dueDate <= :dueDateTo)
+            """)
+            List<Todo> searchTodos(
+                @Param("keyword") String keyword,
+                @Param("status") TodoStatus status,
+                @Param("priority") TodoPriority priority,
+                @Param("dueDateFrom") LocalDate dueDateForm,
+                @Param("dueDateTo") LocalDate dueDateTo
+            );
 }
