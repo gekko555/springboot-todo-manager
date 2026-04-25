@@ -62,11 +62,11 @@ public interface TodoRepository extends JpaRepository<Todo, Long>{
 
     //12.作成日が新しい順
     @Query("SELECT t FROM Todo t ORDER BY t.createdAt DESC")
-    List<Todo> findAllORderByCreatedAtDesc();
+    List<Todo> findAllOrderByCreatedAtDesc();
 
     //13.作成日が古い順
     @Query("SELECT t FROM Todo t OREDR BY t.createdAt ASC")
-    List<Todo> findAllORderByCreatedAtAsc();
+    List<Todo> findAllOrderByCreatedAtAsc();
 
     //14.期限が早い順
     @Query("SELECT t FROM Todo t OREDR BY t.dueDate ASC")
@@ -97,7 +97,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long>{
              AND t.priority = :priority
     """)
     List<Todo> findByStatusAndPriorityList(
-        @Param("statsu") TodoStatus status,
+        @Param("status") TodoStatus status,
         @Param("priority") TodoPriority priority
     );
 
@@ -114,7 +114,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long>{
                 @Param("keyword") String keyword,
                 @Param("status") TodoStatus status,
                 @Param("priority") TodoPriority priority,
-                @Param("dueDateFrom") LocalDate dueDateForm,
+                @Param("dueDateFrom") LocalDate dueDateFrom,
                 @Param("dueDateTo") LocalDate dueDateTo
             );
 }

@@ -1,5 +1,6 @@
 package com.example.todomanager.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.todomanager.dto.TodoDisplayDto;
 import com.example.todomanager.entity.Todo;
+import com.example.todomanager.enums.TodoPriority;
+import com.example.todomanager.enums.TodoStatus;
 import com.example.todomanager.service.TodoService;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -56,6 +60,19 @@ public class TodoController {
         Todo updatedTodo = todoService.updateTodo(id, todo);
         TodoDisplayDto dto = todoService.convertToDto(updatedTodo);
         return ResponseEntity.ok(dto);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<TodoDisplayDto>> searchTodos(
+        @RequestParam(required = false) String keyword,
+        @RequestParam(required = false) TodoStatus status,
+        @RequestParam(required = false) TodoPriority priority,
+        @RequestParam(required = false) LocalDate dueDateFrom,
+        @RequestParam(required = false) LocalDate dueDateTo
+    ){
+        List<TodoDisplayDto> todos = todoService.searchTodos(keyword, status, priority,dueDateFrom, dueDateTo
+
+        );
+        return ResponseEntity.ok(todos);
     }
     
 }

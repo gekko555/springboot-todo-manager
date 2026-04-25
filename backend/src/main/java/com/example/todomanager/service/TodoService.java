@@ -1,5 +1,6 @@
 package com.example.todomanager.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.todomanager.dto.TodoDisplayDto;
 import com.example.todomanager.entity.Todo;
+import com.example.todomanager.enums.TodoPriority;
+import com.example.todomanager.enums.TodoStatus;
 import com.example.todomanager.repository.TodoRepository;
 
 import lombok.NonNull;
@@ -85,5 +88,24 @@ public class TodoService {
         return todoRepository.save(existingTodo);
 
     }
+
+    public List<TodoDisplayDto> searchTodos(
+        String keyword,
+        TodoStatus status,
+        TodoPriority priority,
+        LocalDate dueDateFrom,
+        LocalDate dueDateTo
+    ){
+        List<Todo> todos = todoRepository.searchTodos(
+            keyword,status,priority,null,null);
+
+            List<TodoDisplayDto> dtos = new ArrayList<>();
+            for(Todo todo : todos){
+                TodoDisplayDto dto = convertToDto(todo);
+                dtos.add(dto);
+            }
+            return dtos;
+        }
+
     
 }
